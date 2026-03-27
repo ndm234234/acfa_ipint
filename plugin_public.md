@@ -10,9 +10,9 @@
 ## Содержание
 
 - [Plugin Configuration](#plugin-configuration)
-- [Common Types (public.common.proto)](#common-types-publiccommonproto)
-- [Channel (public.channel.proto)](#channel-publicchannelproto)
-- [Platform API (public.platform.proto)](#platform-api-publicplatformproto)
+- [Common Types](#common-types)
+- [Channel](#channel)
+- [Platform API ](#platform-api)
 
 ---
 
