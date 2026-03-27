@@ -61,22 +61,26 @@ message ObjectType {
   string type = 1;
 }
 
+// Ссылка на объект (лёгкая версия Unit)
+message ObjectReference {
+  ObjectType type = 1;  // тип объекта
+  string id = 2;        // уникальный идентификатор
+}
+
 // Объект с иерархией (для Setup/Delete)
 message Unit {
-  ObjectType type = 1;               // тип объекта
-  string id = 2;                     // уникальный идентификатор
-  string parent_id = 3;              // идентификатор родителя
-  google.protobuf.Struct params = 4; // параметры объекта
+  ObjectReference object = 1;        // тип объекта
+  string parent_id = 2;              // идентификатор родителя
+  google.protobuf.Struct params = 3; // параметры объекта
 }
 
 // Действие над объектом (для Event/React)
 message UnitAction {
-  ObjectType type = 1;                     // тип объекта
-  string id = 2;                           // идентификатор объекта
-  string action = 3;                       // действие: "MD_START", "REC" и т.д.
-  string uuid = 4;                         // UUID действия
-  google.protobuf.Timestamp timestamp = 5; // временная метка
-  google.protobuf.Struct params = 6;       // параметры действия
+  ObjectReference object = 1;              // тип объекта
+  string action = 2;                       // действие: "MD_START", "REC" и т.д.
+  string uuid = 3;                         // UUID действия
+  google.protobuf.Timestamp timestamp = 4; // временная метка
+  google.protobuf.Struct params = 5;       // параметры действия
 }
 ```
 
@@ -191,7 +195,7 @@ message Setup {
 
 // Удаление объекта (достаточно type + id)
 message Delete {
-  Unit object = 1;
+  ObjectReference object = 1;
   google.protobuf.Timestamp timestamp = 2;
 }
 
