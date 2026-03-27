@@ -12,7 +12,7 @@
 - [Plugin Configuration](#plugin-configuration)
 - [Common Types](#common-types)
 - [Channel](#channel)
-- [Platform API ](#platform-api)
+- [Platform API](#platform-api) 
 
 ---
 
@@ -282,7 +282,6 @@ option go_package = "platform/public/api/v1";
 
 // gRPC-сервис для запросов к платформе (unary RPC)
 service PlatformService {
-
   rpc ListObjects(ListObjectsRequest) returns (ListObjectsResponse);
   rpc ListChildren(ListChildrenRequest) returns (ListChildrenResponse);
   rpc GetObject(GetObjectRequest) returns (Unit);
