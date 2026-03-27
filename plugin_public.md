@@ -10,17 +10,33 @@
 ## Содержание
 
 - [Plugin Configuration](#plugin-configuration)
-- [Common Types](#common-types)
-- [Channel](#channel)
+- [Common Types (public.common.proto)](#common-types-publiccommonproto)
+- [Channel (public.channel.proto)](#channel-publicchannelproto)
+- [Platform API (public.platform.proto)](#platform-api-publicplatformproto)
 
 ---
 
 ## Plugin Configuration
 
-Параметры плагина — типы объектов, топология (иерархия), события, реакции, опциональная необходимость в получении БД от платформы — задаются в JSON-файле конфигурации.
+Параметры плагина задаются в JSON-файле конфигурации:
 
-- **Схема конфигурации:** [`plugin_json_schema.json`](plugin_json_schema.json)
-- **Схема локализации:** [`plugin_json_localization_schema.json`](plugin_json_localization_schema.json)
+- Типы объектов — какие сущности использует плагин.
+- Топология (иерархия) — как объекты связаны и вложены друг в друга.
+- Все возможные события — на что плагин реагирует.
+- Все возможные реакции — что плагин делает в ответ.
+
+### Databases (optional)
+
+Если плагину нужен доступ к базе данных:
+
+- Плагин указывает логическое имя БД в конфигурации (поле `databases`)
+- Платформа по этому имени предоставляет connection string
+- Для кластерных конфигураций платформа сама обеспечивает доступность БД
+
+Если БД от платформы не нужна — поле `databases` не указывается.
+
+- **Схема конфигурации:** `[plugin_json_schema.json](plugin_json_schema.json)`
+- **Схема локализации:** `[plugin_json_localization_schema.json](plugin_json_localization_schema.json)`
 
 Локализационные ключи (`name_key`, `description_key`) из конфигурации резолвятся через файл локализации.
 
@@ -242,6 +258,65 @@ message PlatformMessage {
     Shutdown shutdown = 8;
     Error error = 9;
   }
+}
+```
+
+---
+
+## Platform API (public.platform.proto)
+
+```protobuf
+syntax = "proto3";
+
+package platform.public.api.v1;
+
+import "platform/public/api/v1/common.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Platform.Public.Api.V1";
+option go_package = "platform/public/api/v1";
+
+// gRPC-сервис для запросов к платформе (unary RPC)
+service PlatformService {
+
+  rpc ListObjects(ListObjectsRequest) returns (ListObjectsResponse);
+  rpc ListChildren(ListChildrenRequest) returns (ListChildrenResponse);
+  rpc GetObject(GetObjectRequest) returns (Unit);
+}
+
+// Получение объекта по типу и id
+message GetObjectRequest {
+  string type = 1;   // тип объекта
+  string id = 2;     // id объекта
+  google.protobuf.FieldMask mask = 3; // какие поля возвращать
+}
+
+// Получение объектов по типу
+message ListObjectsRequest {
+  string type = 1;   // тип объекта: "CAM", "SENSOR" и т.д.
+  string page_token = 2;
+  int32 page_size = 3;
+  google.protobuf.FieldMask mask = 4; // какие поля возвращать для каждого Unit
+}
+
+message ListObjectsResponse {
+  repeated Unit objects = 1;
+  string next_page_token = 2;
+}
+
+// Получение дочерних объектов
+message ListChildrenRequest {
+  string parent_type = 1;  // тип родителя
+  string parent_id = 2;    // id родителя
+  string child_type = 3;   // тип дочерних объектов (пусто = все типы)
+  string page_token = 4;
+  int32 page_size = 5;
+  google.protobuf.FieldMask mask = 6; // какие поля возвращать для каждого Unit
+}
+
+message ListChildrenResponse {
+  repeated Unit objects = 1;
+  string next_page_token = 2;
 }
 ```
 
