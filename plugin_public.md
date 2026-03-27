@@ -35,8 +35,8 @@
 
 Если БД от платформы не нужна — поле `databases` не указывается.
 
-- **Схема конфигурации:** `[plugin_json_schema.json](plugin_json_schema.json)`
-- **Схема локализации:** `[plugin_json_localization_schema.json](plugin_json_localization_schema.json)`
+- **Схема конфигурации:** [plugin_json_schema.json](plugin_json_schema.json)
+- **Схема локализации:** [plugin_json_localization_schema.json](plugin_json_localization_schema.json)
 
 Локализационные ключи (`name_key`, `description_key`) из конфигурации резолвятся через файл локализации.
 
