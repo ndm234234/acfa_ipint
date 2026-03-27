@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Object Types",
+  "type": "object",
+  "properties": {
+    "databases": {
+      "type": "array",
+      "description": "Логические имена баз данных, запрашиваемых у платформы",
+      "items": {
+        "type": "string"
+      }
+    },
+    "object_types": {
+      "type": "array",
+      "description": "Типы устройств",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Тип устройства (любое строковое значение)"
+          },
+          "parent": { 
+            "type": ["string", "null"],
+            "description": "Родительский тип, null = корневой тип"
+          },
+          "name_key": { 
+            "type": "string",
+            "description": "Локализационный ключ для имени типа"
+          },
+          "parameters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string", "enum": ["string", "integer", "float", "boolean"] },
+                "default": {},
+                "min": { "type": "number" },
+                "max": { "type": "number" },
+                "name_key": { "type": "string" },
+                "description_key": { "type": "string" }
+              },
+              "required": ["type", "name_key", "description_key"]
+            }
+          },
+          "events": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "name_key": { "type": "string" },
+                "description_key": { "type": "string" },
+                "severity": { 
+                  "type": "string",
+                  "enum": ["info", "warning", "error", "critical", "alarm"]
+                }
+              },
+              "required": ["name_key", "description_key", "severity"]
+            }
+          },
+          "reacts": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "name_key": { "type": "string" },
+                "description_key": { "type": "string" },
+                "action": {
+                  "type": "string",
+                  "description": "Идентификатор действия (произвольная строка)"
+                },
+                "target": {
+                  "type": "string",
+                  "description": "Цель действия"
+                },
+                "parameters": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "required": ["name_key", "description_key", "action"]
+            }
+          }
+        },
+        "required": ["type", "name_key"]
+      }
+    }
+  },
+  "required": ["object_types"]
+}
