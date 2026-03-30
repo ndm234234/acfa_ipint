@@ -10,6 +10,37 @@
         "type": "string"
       }
     },
+    "resources": {
+      "type": "array",
+      "description": "Ресурсы, публикуемые плагином через платформу (HTTP-серверы, статические файлы, внешние ссылки)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Уникальный идентификатор ресурса в рамках плагина"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["PROXY", "STATIC", "LINK"],
+            "description": "Тип ресурса: PROXY — HTTP(S)/WS сервер, STATIC — директория с файлами, LINK — внешняя ссылка"
+          },
+          "path_prefix": {
+            "type": "string",
+            "description": "Суффикс публичного пути (напр. \"/ui\", \"/api\")"
+          },
+          "display_name_key": {
+            "type": "string",
+            "description": "Локализационный ключ для отображаемого имени ресурса"
+          },
+          "description_key": {
+            "type": "string",
+            "description": "Локализационный ключ для описания ресурса"
+          }
+        },
+        "required": ["id", "type", "display_name_key"]
+      }
+    },
     "object_types": {
       "type": "array",
       "description": "Типы устройств",
